@@ -10,9 +10,15 @@
 
 <style>
 :root {
-  --bg:#080808; --panel:#121212; --panel2:#1b1b1b;
-  --gold:#d5a52b; --gold2:#f4d477; --text:#f7f4ec;
-  --muted:#aaa49a; --line:#302817; --green:#35b66a;
+  --bg:#080808;
+  --panel:#121212;
+  --panel2:#1b1b1b;
+  --gold:#d5a52b;
+  --gold2:#f4d477;
+  --text:#f7f4ec;
+  --muted:#aaa49a;
+  --line:#302817;
+  --green:#35b66a;
   --red:#e05252;
 }
 *{box-sizing:border-box}
@@ -161,15 +167,40 @@ button{cursor:pointer}
 .pixkey{font-weight:900;color:var(--gold2);word-break:break-word}
 .footer{text-align:center;color:#777;border-top:1px solid #292216;padding:25px 12px;font-size:12px}
 
-/* CHAT DA ATENDENTE VIRTUAL */
+/* BOTÃO PROFISSIONAL DA ATENDENTE VIRTUAL */
 .ai-launcher{
-  position:fixed;right:20px;bottom:20px;z-index:60;
-  display:flex;align-items:center;gap:10px;padding:13px 18px;
-  border:1px solid #f4d477;border-radius:999px;
-  background:linear-gradient(135deg,#f1cf70,#b47b12);
-  color:#130d02;font-weight:900;box-shadow:0 8px 30px #0009
+  position:fixed;right:22px;bottom:22px;z-index:60;
+  display:flex;align-items:center;gap:11px;
+  padding:11px 18px 11px 11px;
+  border:1px solid rgba(212,175,55,.65);
+  border-radius:16px;
+  background:linear-gradient(145deg,#191919,#090909);
+  color:#f4d477;
+  font-size:14px;font-weight:800;letter-spacing:.2px;
+  box-shadow:0 8px 28px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.05);
+  cursor:pointer;
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
 }
-.ai-launcher .ai-symbol{font-size:22px}
+.ai-launcher .ai-symbol{
+  display:grid;place-items:center;
+  width:36px;height:36px;flex-shrink:0;
+  border-radius:11px;
+  background:linear-gradient(135deg,#f1d36b,#b88a24);
+  color:#111;font-size:21px;
+}
+.ai-launcher::after{
+  content:"ONLINE";
+  position:absolute;top:-8px;right:12px;
+  padding:3px 7px;border:1px solid #39301b;border-radius:20px;
+  background:#151515;color:#f1d36b;
+  font-size:9px;font-weight:800;letter-spacing:.7px;
+}
+.ai-launcher:hover{
+  transform:translateY(-3px);
+  border-color:#f1d36b;
+  box-shadow:0 12px 32px rgba(212,175,55,.16);
+}
+.ai-launcher:active{transform:scale(.97)}
 .ai-panel{
   position:fixed;right:20px;bottom:86px;z-index:61;
   width:min(390px,calc(100vw - 24px));height:min(570px,calc(100dvh - 120px));
@@ -184,7 +215,7 @@ button{cursor:pointer}
   border-bottom:1px solid #453719
 }
 .ai-avatar{
-  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
   background:linear-gradient(135deg,#f1cf70,#b47b12);color:#171006;font-size:22px
 }
 .ai-title{flex:1;min-width:0}
@@ -224,6 +255,7 @@ button{cursor:pointer}
 }
 .ai-compose button:disabled{opacity:.5;cursor:not-allowed}
 .ai-footnote{text-align:center;color:#777;font-size:10px;padding:0 10px 8px;background:#0b0b0b}
+
 @media(max-width:850px){
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .hero-inner{padding:25px;min-height:250px}
@@ -240,7 +272,8 @@ button{cursor:pointer}
   .sectionhead h2{font-size:22px}
   .nav-actions{gap:5px}
   .iconbtn{padding:9px 10px}
-  .ai-launcher{right:12px;bottom:12px;padding:11px 15px}
+  .ai-launcher{right:12px;bottom:12px;padding:9px 13px 9px 9px;font-size:13px}
+  .ai-launcher .ai-symbol{width:32px;height:32px}
   .ai-panel{right:12px;bottom:75px;width:calc(100vw - 24px);height:min(570px,calc(100dvh - 100px))}
 }
 </style>
@@ -288,7 +321,6 @@ button{cursor:pointer}
     <button class="pill" onclick="selectCategory('Açaí')">🍇 Açaí</button>
     <button class="pill" onclick="selectCategory('Frango assado')">🍗 Frango assado</button>
   </div>
-
   <div class="searchrow">
     <input id="search" type="search" placeholder="🔎 Pesquisar produto..." oninput="renderProducts()">
   </div>
@@ -308,7 +340,7 @@ button{cursor:pointer}
     <a class="insta" href="https://www.instagram.com/vf_filhoslanches?stkn=aGVnYjFycWo4YXgz" target="_blank" rel="noopener">◎ Instagram</a>
     <a href="#catalog" onclick="closeDrawers()">Ver cardápio</a>
     <a href="#" onclick="openHistory();return false">🧾 Histórico de pedidos</a>
-    <a href="#" onclick="openAI();return false">🤖 Conversar com a atendente virtual</a>
+    <a href="#" onclick="openAI();return false">✦ Conversar com a atendente virtual</a>
   </div>
   <div class="pixbox">
     <b>Pagamento via PIX</b>
@@ -337,8 +369,11 @@ button{cursor:pointer}
   <div class="field">
     <label>Forma de pagamento *</label>
     <select id="payment">
-      <option value="">Selecione</option><option>PIX</option><option>Dinheiro</option>
-      <option>Cartão de débito</option><option>Cartão de crédito</option>
+      <option value="">Selecione</option>
+      <option>PIX</option>
+      <option>Dinheiro</option>
+      <option>Cartão de débito</option>
+      <option>Cartão de crédito</option>
     </select>
   </div>
   <div class="field"><label>Precisa de troco? (se pagar em dinheiro)</label><input id="changeFor" placeholder="Ex.: Troco para R$ 50,00"></div>
@@ -357,14 +392,15 @@ button{cursor:pointer}
   <button class="secondary" onclick="clearHistory()">Limpar histórico deste aparelho</button>
 </aside>
 
-<!-- Janela da atendente virtual -->
+<!-- ATENDENTE VIRTUAL -->
 <button class="ai-launcher" id="aiLauncher" onclick="toggleAI()" aria-label="Abrir atendente virtual">
-  <span class="ai-symbol">🤖</span><span>Fale com a IA</span>
+  <span class="ai-symbol">✦</span>
+  <span>Atendimento Virtual</span>
 </button>
 
 <section class="ai-panel" id="aiPanel" aria-label="Atendente virtual" aria-hidden="true">
   <div class="ai-header">
-    <div class="ai-avatar">🤖</div>
+    <div class="ai-avatar">✦</div>
     <div class="ai-title">
       <strong>Atendente virtual</strong>
       <small>VF FILHOS LANCHES • Assistente com IA</small>
@@ -372,7 +408,7 @@ button{cursor:pointer}
     <button class="ai-close" onclick="closeAI()" aria-label="Fechar chat">✕</button>
   </div>
   <div class="ai-messages" id="aiMessages" aria-live="polite">
-    <div class="ai-message bot">Olá! 👋 Sou a atendente virtual da VF FILHOS LANCHES. Posso ajudar com nosso cardápio, preços, horários e como fazer seu pedido. O que você gostaria de saber?</div>
+    <div class="ai-message bot">Olá! Sou a atendente virtual da VF FILHOS LANCHES. Posso ajudar com nosso cardápio, preços, horários e como fazer seu pedido. O que você gostaria de saber?</div>
   </div>
   <div class="ai-typing" id="aiTyping">A atendente está digitando...</div>
   <form class="ai-compose" id="aiForm">
@@ -451,7 +487,7 @@ function updateStatus(){
   document.getElementById('hoursText').textContent='• Todos os dias, 10h às 00h';
   const now=open?'open':'closed';
   const last=localStorage.getItem('vf_last_status');
-  if(last && last!==now) playStatusSound();
+  if(last && last!==now)playStatusSound();
   localStorage.setItem('vf_last_status',now);
 }
 
@@ -637,7 +673,6 @@ function setAITyping(show){
   el.classList.toggle('show',show);
   document.getElementById('aiMessages').scrollTop=document.getElementById('aiMessages').scrollHeight;
 }
-
 function getMenuForAI(){
   return products.map(p=>{
     const availableNow=storeOpen()&&(!p.weekend||weekend());
@@ -716,13 +751,11 @@ async function sendAIMessage(event){
 
     const reply=typeof data.reply==='string'?data.reply.trim():
       typeof data.message==='string'?data.message.trim():'';
-
     if(!reply)throw new Error('O servidor não enviou uma resposta da IA.');
 
     addAIMessage(reply,'bot');
     aiHistory.push({role:'model',text:reply});
     aiHistory=aiHistory.slice(-10);
-
   }catch(error){
     console.error('Erro na atendente virtual:',error);
     let helpText='Não consegui responder agora. Tente novamente em instantes.';
